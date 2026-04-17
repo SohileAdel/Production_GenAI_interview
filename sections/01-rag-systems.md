@@ -72,22 +72,56 @@ RAG (Retrieval-Augmented Generation) combines information retrieval with text ge
 **Expected Answer:**
 
 **Self-RAG (Self-Reflective RAG):**
-- LLM decides whether retrieval is needed for each query
-- After retrieval, LLM evaluates if retrieved docs are relevant
-- Can regenerate if initial response is unsatisfactory
-- Use when: Query types vary widely (some need retrieval, some don't)
+* The LLM performs **self-reflection on both retrieval need and answer quality**
+* After retrieval, the LLM **assesses relevance and sufficiency of the context** through structured or semi-structured critique
+* The system may **iteratively retrieve and refine** based on the LLM’s feedback (e.g., missing information, insufficient grounding)
+* Retrieval decisions are **driven by LLM-generated judgments**, not fixed rules or thresholds
+
+**Use when:**
+
+* Queries require **multi-step reasoning or exploration**
+* Information needs are **uncertain or dynamic**
+* You want flexible, reasoning-driven retrieval behavior (e.g., open-domain QA, research assistants)
 
 **CRAG (Corrective RAG):**
-- Adds a "retrieval evaluator" that scores document relevance
-- If relevance is low, triggers web search or alternative retrieval
-- Includes knowledge refinement step before generation
-- Use when: Knowledge base may be incomplete
+* Introduces a **retrieval evaluation mechanism (often LLM-assisted or embedding-based)**
+* Evaluates retrieved documents using **structured signals (e.g., relevance, coverage scores)**
+* If retrieval quality is low, triggers **corrective actions** such as:
+
+  * query rewriting
+  * hybrid retrieval (BM25 + vector search)
+  * external search (e.g., web search)
+* Uses **explicit system-defined rules or thresholds** to decide actions
+* Focus is on improving **retrieval quality before generation**
+
+**Use when:**
+
+* Knowledge base may be **incomplete or noisy**
+* You need **reliable, controllable retrieval quality**
+* Production systems require **deterministic behavior**
 
 **Corrective RAG:**
-- Focuses on detecting and correcting errors in generated responses
-- Uses fact-checking against retrieved documents
-- May iterate multiple times until response is verified
-- Use when: Accuracy is critical (legal, medical, financial)
+*(This is often confused with CRAG, but is more general.)*
+
+* Focuses on **iteratively improving the answer by detecting errors or missing facts**
+* May include:
+
+  * fact-checking against retrieved documents
+  * consistency verification
+  * iterative refinement of the generated answer
+* Can loop multiple times:
+
+  * generate → verify → correct → regenerate
+* Verification may use:
+
+  * LLM-based checking
+  * rule-based checks
+  * external tools
+
+**Use when:**
+
+* Answer correctness is **critical (legal, medical, financial)**
+* You need **post-generation verification**, not just retrieval improvement
 
 **Key insight:** These aren't mutually exclusive — production systems often combine elements from all three.
 
