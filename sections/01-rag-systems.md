@@ -73,6 +73,7 @@ RAG (Retrieval-Augmented Generation) combines information retrieval with text ge
 
 **Self-RAG (Self-Reflective RAG):**
 * The LLM performs **self-reflection on both retrieval need and answer quality**
+* May allow the LLM to decide whether retrieval is needed
 * After retrieval, the LLM **assesses relevance and sufficiency of the context** through structured or semi-structured critique
 * The system may **iteratively retrieve and refine** based on the LLM’s feedback (e.g., missing information, insufficient grounding)
 * Retrieval decisions are **driven by LLM-generated judgments**, not fixed rules or thresholds
