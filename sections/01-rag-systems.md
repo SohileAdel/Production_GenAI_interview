@@ -72,19 +72,36 @@ RAG (Retrieval-Augmented Generation) combines information retrieval with text ge
 **Expected Answer:**
 
 **Self-RAG (Self-Reflective RAG):**
+<img alt="image" src="https://github.com/user-attachments/assets/6246e32f-f64c-4fe0-8f21-0f67c5944db5" />
+
 * The LLM performs **self-reflection on both retrieval need and answer quality**
 * May allow the LLM to decide whether retrieval is needed
 * After retrieval, the LLM **assesses relevance and sufficiency of the context** through structured or semi-structured critique
 * The system may **iteratively retrieve and refine** based on the LLM’s feedback (e.g., missing information, insufficient grounding)
 * Retrieval decisions are **driven by LLM-generated judgments**, not fixed rules or thresholds
+* Evaluation can be done in any stage
 
 **Use when:**
 
+* Questions are incomplete or there is insufficient detail to retrieve the proper documents
 * Queries require **multi-step reasoning or exploration**
 * Information needs are **uncertain or dynamic**
 * You want flexible, reasoning-driven retrieval behavior (e.g., open-domain QA, research assistants)
 
+Pros:
+- Catches and corrects its own mistakes before you see them
+- Helps get better results from vague questions
+- More reliable in scenarios where accuracy matters
+
+Cons:
+- Higher costs to run all those extra checks
+- Slower since it is doing the work twice
+- Can be too cautious and refuse to answer when uncertain
+
+
 **CRAG (Corrective RAG):**
+<img alt="image" src="https://github.com/user-attachments/assets/8f29c66c-7ea2-46eb-a6ca-d68fab37fd50" />
+
 * Introduces a **retrieval evaluation mechanism (often LLM-assisted or embedding-based)**
 * Evaluates retrieved documents using **structured signals (e.g., relevance, coverage scores)**
 * If retrieval quality is low, triggers **corrective actions** such as:
@@ -94,38 +111,27 @@ RAG (Retrieval-Augmented Generation) combines information retrieval with text ge
   * external search (e.g., web search)
 * Uses **explicit system-defined rules or thresholds** to decide actions
 * Focus is on improving **retrieval quality before generation**
+* Evaluation is always performed before generation (in a pure CRAG pipeline)
+
+CRAG improves standard RAG by adding a retrieval evaluation step before generation. After documents are retrieved, the system evaluates their relevance and coverage using structured signals (such as scores or labels). If retrieval quality is insufficient, the system triggers corrective actions such as query rewriting, re-retrieval, or trying a new search before generating the final answer.
 
 **Use when:**
 
+* Accuracy is important, such as in legal research, academic writing, or policy analysis.
 * Knowledge base may be **incomplete or noisy**
 * You need **reliable, controllable retrieval quality**
 * Production systems require **deterministic behavior**
 
-**Corrective RAG:**
-*(This is often confused with CRAG, but is more general.)*
+Pros:
 
-* Focuses on **iteratively improving the answer by detecting errors or missing facts**
-* May include:
+- Catches and fixes poor search results before you see them
+- Improves the reliability and accuracy of generated responses
+- Adds an extra layer of quality control
+Cons:
 
-  * fact-checking against retrieved documents
-  * consistency verification
-  * iterative refinement of the generated answer
-* Can loop multiple times:
-
-  * generate → verify → correct → regenerate
-* Verification may use:
-
-  * LLM-based checking
-  * rule-based checks
-  * external tools
-
-**Use when:**
-
-* Answer correctness is **critical (legal, medical, financial)**
-* You need **post-generation verification**, not just retrieval improvement
-
-**Key insight:** These aren't mutually exclusive — production systems often combine elements from all three.
-
+Takes longer since it might need multiple search attempts
+Can get stuck in loops if it is never satisfied with what it finds
+Uses more computational resources performing extra searches
 ---
 
 #### Q1.5: What is Agentic RAG and how does it differ from naive RAG?
