@@ -249,12 +249,13 @@ GraphRAG is a retrieval-augmented generation approach that constructs a structur
   * simple fact lookup tasks
 
 **Where it performs best**
+
 GraphRAG is especially useful in domains where understanding relationships across documents is important, such as:
 
-investigative journalism
-business intelligence
-scientific literature analysis
-legal discovery systems
+* investigative journalism
+* business intelligence
+* scientific literature analysis
+* legal discovery systems
 
 **Microsoft's GraphRAG Implementation:**
 Microsoft’s GraphRAG improves answer quality for global and dataset-wide queries by leveraging a knowledge graph with hierarchical community summaries instead of flat chunk retrieval. It significantly increases indexing cost and system complexity due to LLM-based entity extraction, relationship building, and summarization. It is best suited for high-value corpora where understanding relationships across documents and producing global insights is more important than minimizing cost or latency.
