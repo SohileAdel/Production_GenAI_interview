@@ -131,52 +131,56 @@ RAG (Retrieval-Augmented Generation) combines information retrieval with text ge
 #### Q1.5: What is Agentic RAG and how does it differ from naive RAG?
 
 **Expected Answer:**
-
+**Expected Answer:**
 
 **Naive RAG:**
+* Single-pass retrieval augmented generation pipeline
+* Query is embedded and used to retrieve top-k documents
+* Retrieved context is passed directly to the LLM
+* No iteration or self-correction loop
+* No dynamic planning or adaptation during inference
 
-* Fixed pipeline: **retrieve → generate**
-* Retrieval strategy is predefined (e.g., top-k vector search)
-* No dynamic decision-making or control flow
-* Limited ability to handle multi-step or ambiguous queries
+**Key idea:**
 
-
+> Fixed pipeline: retrieve once → generate once
 
 **Agentic RAG:**
+* LLM decides how to retrieve, when to retrieve again, and how to refine retrieval strategy
+* LLM acts as a **reasoning agent controlling the retrieval process**
+* Can iteratively:
 
-Agentic RAG introduces an **LLM acting as a controller (agent)** over the RAG pipeline.
+  * decompose queries into sub-questions
+  * decide when retrieval is needed
+  * reformulate queries based on results
+  * retrieve from multiple sources
+  * evaluate retrieved evidence
+  * repeat retrieval if needed
+* Supports multi-step reasoning and dynamic planning
 
-The agent can:
+**Key idea:**
 
-* Decide how to retrieve (not necessarily *whether*)
-* Select between multiple retrieval tools/sources
-* Reformulate queries when results are poor
-* Perform iterative retrieval (multi-step reasoning)
-* Evaluate intermediate results and refine the process
-* Optionally verify or critique final answers
+> Retrieval is a **loop controlled by the LLM, not a single step**
 
+**Key differences:**
 
-
-**Key differences**
-
-| Aspect              | Naive RAG      | Agentic RAG         |
-| ------------------- | -------------- | ------------------- |
-| Control flow        | Fixed pipeline | Dynamic, LLM-driven |
-| Retrieval strategy  | Static         | Adaptive            |
-| Query reformulation | None           | Automatic           |
-| Multi-hop reasoning | Limited        | Supported           |
-| Source selection    | Single         | Multiple            |
-| Self-correction     | None           | Iterative           |
-
-
-
+| Aspect                  | Naive RAG       | Agentic RAG         |
+| ----------------------- | --------------- | ------------------- |
+| Retrieval pattern       | Single-pass     | Multi-step loop     |
+| Control                 | Fixed pipeline  | LLM-driven planning |
+| Query rewriting         | None            | Dynamic             |
+| Multi-hop reasoning     | Weak / external | Native capability   |
+| Evaluation of retrieval | None            | Built-in loop       |
+| Adaptivity              | Low             | High                |
 
 **When to use Agentic RAG:**
+Use Agentic RAG when retrieval cannot be solved in a single static step and requires **adaptive reasoning over retrieval actions**:
 
-* Complex or multi-hop questions
-* Scenarios with multiple data sources (DB + APIs + web)
-* When retrieval quality is inconsistent
-* When queries may need refinement or decomposition
+* Complex queries that require **multi-hop reasoning across documents or sources**
+* Tasks where the system must **decompose a question into sub-questions before retrieving**
+* Cases where the model must **decide dynamically which tools or data sources to use (vector DB, web, APIs, etc.)**
+* Scenarios where initial retrieval is often **insufficient and must be iteratively refined**
+* Applications requiring **query rewriting, planning, and verification during retrieval**
+
 
 ---
 
