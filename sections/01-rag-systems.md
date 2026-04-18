@@ -141,6 +141,7 @@ RAG (Retrieval-Augmented Generation) combines information retrieval with text ge
 * Limited ability to handle multi-step or ambiguous queries
 
 
+
 **Agentic RAG:**
 
 Agentic RAG introduces an **LLM acting as a controller (agent)** over the RAG pipeline.
@@ -155,6 +156,7 @@ The agent can:
 * Optionally verify or critique final answers
 
 
+
 **Key differences**
 
 | Aspect              | Naive RAG      | Agentic RAG         |
@@ -165,6 +167,8 @@ The agent can:
 | Multi-hop reasoning | Limited        | Supported           |
 | Source selection    | Single         | Multiple            |
 | Self-correction     | None           | Iterative           |
+
+
 
 
 **When to use Agentic RAG:**
