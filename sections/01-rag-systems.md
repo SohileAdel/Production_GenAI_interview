@@ -213,6 +213,7 @@ Use Agentic RAG when retrieval cannot be solved in a single static step and requ
 <img alt="image" src="https://github.com/user-attachments/assets/bc1712ba-03f5-416a-806b-e74cadddb914" />
 
 **What is GraphRAG:**
+
 GraphRAG is a retrieval-augmented generation approach that constructs a structured knowledge graph from documents by extracting entities and relationships, then organizing them into hierarchical communities. These communities are summarized using LLMs and used as retrieval units instead of relying purely on chunk-based vector similarity.
 
 **How It Works:**
