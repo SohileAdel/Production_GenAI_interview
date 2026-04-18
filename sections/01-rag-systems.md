@@ -123,15 +123,15 @@ CRAG improves standard RAG by adding a retrieval evaluation step before generati
 * Production systems require **deterministic behavior**
 
 Pros:
-
 - Catches and fixes poor search results before you see them
 - Improves the reliability and accuracy of generated responses
 - Adds an extra layer of quality control
-Cons:
 
-Takes longer since it might need multiple search attempts
-Can get stuck in loops if it is never satisfied with what it finds
-Uses more computational resources performing extra searches
+Cons:
+- Takes longer since it might need multiple search attempts
+- Can get stuck in loops if it is never satisfied with what it finds
+- Uses more computational resources performing extra searches
+
 ---
 
 #### Q1.5: What is Agentic RAG and how does it differ from naive RAG?
