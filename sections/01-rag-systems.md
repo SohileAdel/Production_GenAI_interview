@@ -132,33 +132,47 @@ RAG (Retrieval-Augmented Generation) combines information retrieval with text ge
 
 **Expected Answer:**
 
+
 **Naive RAG:**
-- Single retrieval → Single generation
-- No iteration or self-correction
-- Query goes in, answer comes out
+
+* Fixed pipeline: **retrieve → generate**
+* Retrieval strategy is predefined (e.g., top-k vector search)
+* No dynamic decision-making or control flow
+* Limited ability to handle multi-step or ambiguous queries
+
 
 **Agentic RAG:**
-- LLM acts as an agent that can:
-  - Decide IF retrieval is needed
-  - Choose WHICH retrieval source to use
-  - Determine if MORE retrieval is needed
-  - REFORMULATE queries if results are poor
-  - VERIFY answers against sources
 
-**Key differences:**
+Agentic RAG introduces an **LLM acting as a controller (agent)** over the RAG pipeline.
 
-| Aspect | Naive RAG | Agentic RAG |
-|--------|-----------|-------------|
-| Retrieval decisions | Fixed | Dynamic |
-| Query reformulation | None | Automatic |
-| Multi-hop reasoning | Limited | Supported |
-| Source selection | Single | Multiple |
-| Self-correction | None | Built-in |
+The agent can:
+
+* Decide how to retrieve (not necessarily *whether*)
+* Select between multiple retrieval tools/sources
+* Reformulate queries when results are poor
+* Perform iterative retrieval (multi-step reasoning)
+* Evaluate intermediate results and refine the process
+* Optionally verify or critique final answers
+
+
+**Key differences**
+
+| Aspect              | Naive RAG      | Agentic RAG         |
+| ------------------- | -------------- | ------------------- |
+| Control flow        | Fixed pipeline | Dynamic, LLM-driven |
+| Retrieval strategy  | Static         | Adaptive            |
+| Query reformulation | None           | Automatic           |
+| Multi-hop reasoning | Limited        | Supported           |
+| Source selection    | Single         | Multiple            |
+| Self-correction     | None           | Iterative           |
+
 
 **When to use Agentic RAG:**
-- Complex questions requiring multiple sources
-- Questions that may need clarification
-- When retrieval quality varies significantly
+
+* Complex or multi-hop questions
+* Scenarios with multiple data sources (DB + APIs + web)
+* When retrieval quality is inconsistent
+* When queries may need refinement or decomposition
 
 ---
 
