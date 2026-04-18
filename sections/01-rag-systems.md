@@ -210,38 +210,71 @@ Use Agentic RAG when retrieval cannot be solved in a single static step and requ
 #### Q1.11: What is GraphRAG and when does it outperform standard vector RAG?
 
 **Expected Answer:**
+<img alt="image" src="https://github.com/user-attachments/assets/bc1712ba-03f5-416a-806b-e74cadddb914" />
 
 **What is GraphRAG:**
-GraphRAG builds a knowledge graph from documents and uses graph traversal combined with community summaries for retrieval, rather than relying solely on vector similarity.
+GraphRAG is a retrieval-augmented generation approach that constructs a structured knowledge graph from documents by extracting entities and relationships, then organizing them into hierarchical communities. These communities are summarized using LLMs and used as retrieval units instead of relying purely on chunk-based vector similarity.
 
 **How It Works:**
-1. Extract entities and relationships from documents using LLM
-2. Build a knowledge graph connecting entities
-3. Create hierarchical community summaries at different graph levels
-4. At query time, traverse graph structure and use community summaries
+1. Extract entities and relationships from text using an LLM
+2. Build a knowledge graph of connected entities
+3. Apply community detection (e.g., Leiden/Louvain clustering)
+4. Generate hierarchical community summaries using an LLM
+5. At query time:
+
+   * retrieve relevant community summaries (global queries)
+   * or local entity neighborhoods (local queries)
+   * then synthesize answer with an LLM
 
 **When GraphRAG Outperforms Vector RAG:**
 
-| Query Type | Vector RAG | GraphRAG |
-|------------|-----------|----------|
-| Specific factual | ✅ Excellent | ⚠️ Overkill |
-| Global/summary ("main themes across all docs") | ❌ Poor | ✅ Excellent |
-| Relationship ("how are X and Y connected?") | ❌ Misses connections | ✅ Captures relationships |
-| Multi-hop reasoning | ⚠️ Struggles | ✅ Follows entity paths |
-| Keyword-heavy | ✅ Good with hybrid | ⚠️ Not its strength |
+| Query Type            | Vector RAG | GraphRAG    |
+| --------------------- | ---------- | ----------- |
+| Specific facts        | ✅ Strong   | ⚠️ Overhead |
+| Global summarization  | ❌ Weak     | ✅ Strong    |
+| Relationship queries  | ❌ Limited  | ✅ Strong    |
+| Multi-hop reasoning   | ⚠️ Weak    | ✅ Strong    |
+| Cross-document themes | ❌ Poor     | ✅ Excellent |
 
 **Cost Considerations:**
-- GraphRAG indexing costs 10-100x more than vector indexing (LLM calls for entity extraction)
-- Query-time costs are also higher (graph traversal + summarization)
-- For a 1M document corpus, graph construction might cost $5,000-$50,000
+* High **indexing cost** due to:
+
+  * entity extraction
+  * relationship extraction
+  * clustering
+  * summarization
+
+* Lower query efficiency for:
+
+  * simple fact lookup tasks
+
+**Where it performs best**
+GraphRAG is especially useful in domains where understanding relationships across documents is important, such as:
+
+investigative journalism
+business intelligence
+scientific literature analysis
+legal discovery systems
 
 **Microsoft's GraphRAG Implementation:**
-- Improved answer quality significantly for global/summarization queries
-- But at dramatically higher cost and complexity
-- Best suited for high-value corpora where relationship understanding matters
+Microsoft’s GraphRAG improves answer quality for global and dataset-wide queries by leveraging a knowledge graph with hierarchical community summaries instead of flat chunk retrieval. It significantly increases indexing cost and system complexity due to LLM-based entity extraction, relationship building, and summarization. It is best suited for high-value corpora where understanding relationships across documents and producing global insights is more important than minimizing cost or latency.
 
 **Production Approach:**
-Use both — vector RAG for specific queries (90% of traffic), GraphRAG for exploratory/global queries (10% of traffic)
+GraphRAG and vector RAG are not competitors—they are **routing strategies**:
+
+* Vector RAG → high-volume, low-complexity queries
+* GraphRAG → deep analysis, global reasoning, relationship-heavy queries
+
+**Pros:**
+* Strong at cross-document reasoning and global summarization
+* Captures relationships between entities explicitly
+* Reduces “fragmented context” problem of vector RAG
+
+**Cons:**
+* High indexing cost (entity + relationship extraction + clustering)
+* More complex pipeline than vector RAG
+* Slower and heavier at build time and query time
+* Quality depends heavily on graph construction accuracy
 
 **Key insight:** GraphRAG and vector RAG are complementary, not competing. Choose based on query types, not hype.
 
