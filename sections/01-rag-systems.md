@@ -207,6 +207,46 @@ Use Agentic RAG when retrieval cannot be solved in a single static step and requ
 
 ---
 
+#### Q1.11: What is GraphRAG and when does it outperform standard vector RAG?
+
+**Expected Answer:**
+
+**What is GraphRAG:**
+GraphRAG builds a knowledge graph from documents and uses graph traversal combined with community summaries for retrieval, rather than relying solely on vector similarity.
+
+**How It Works:**
+1. Extract entities and relationships from documents using LLM
+2. Build a knowledge graph connecting entities
+3. Create hierarchical community summaries at different graph levels
+4. At query time, traverse graph structure and use community summaries
+
+**When GraphRAG Outperforms Vector RAG:**
+
+| Query Type | Vector RAG | GraphRAG |
+|------------|-----------|----------|
+| Specific factual | ✅ Excellent | ⚠️ Overkill |
+| Global/summary ("main themes across all docs") | ❌ Poor | ✅ Excellent |
+| Relationship ("how are X and Y connected?") | ❌ Misses connections | ✅ Captures relationships |
+| Multi-hop reasoning | ⚠️ Struggles | ✅ Follows entity paths |
+| Keyword-heavy | ✅ Good with hybrid | ⚠️ Not its strength |
+
+**Cost Considerations:**
+- GraphRAG indexing costs 10-100x more than vector indexing (LLM calls for entity extraction)
+- Query-time costs are also higher (graph traversal + summarization)
+- For a 1M document corpus, graph construction might cost $5,000-$50,000
+
+**Microsoft's GraphRAG Implementation:**
+- Improved answer quality significantly for global/summarization queries
+- But at dramatically higher cost and complexity
+- Best suited for high-value corpora where relationship understanding matters
+
+**Production Approach:**
+Use both — vector RAG for specific queries (90% of traffic), GraphRAG for exploratory/global queries (10% of traffic)
+
+**Key insight:** GraphRAG and vector RAG are complementary, not competing. Choose based on query types, not hype.
+
+---
+
 #### Q1.6: How do you handle multi-hop questions in RAG?
 
 **Expected Answer:**
