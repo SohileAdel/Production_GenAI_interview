@@ -102,6 +102,9 @@ Cons:
 **CRAG (Corrective RAG):**
 <img alt="image" src="https://github.com/user-attachments/assets/8f29c66c-7ea2-46eb-a6ca-d68fab37fd50" />
 
+CRAG improves standard RAG by adding a retrieval evaluation step before generation. After documents are retrieved, the system evaluates their relevance and coverage using structured signals (such as scores or labels). If retrieval quality is insufficient, the system triggers corrective actions such as query rewriting, re-retrieval, or trying a new search before generating the final answer.
+
+It:
 * Introduces a **retrieval evaluation mechanism (often LLM-assisted or embedding-based)**
 * Evaluates retrieved documents using **structured signals (e.g., relevance, coverage scores)**
 * If retrieval quality is low, triggers **corrective actions** such as:
@@ -112,8 +115,6 @@ Cons:
 * Uses **explicit system-defined rules or thresholds** to decide actions
 * Focus is on improving **retrieval quality before generation**
 * Evaluation is always performed before generation (in a pure CRAG pipeline)
-
-CRAG improves standard RAG by adding a retrieval evaluation step before generation. After documents are retrieved, the system evaluates their relevance and coverage using structured signals (such as scores or labels). If retrieval quality is insufficient, the system triggers corrective actions such as query rewriting, re-retrieval, or trying a new search before generating the final answer.
 
 **Use when:**
 
@@ -137,7 +138,6 @@ Cons:
 #### Q1.5: What is Agentic RAG and how does it differ from naive RAG?
 
 **Expected Answer:**
-**Expected Answer:**
 
 **Naive RAG:**
 * Single-pass retrieval augmented generation pipeline
@@ -151,6 +151,12 @@ Cons:
 > Fixed pipeline: retrieve once → generate once
 
 **Agentic RAG:**
+<img alt="image" src="https://github.com/user-attachments/assets/cd2d8dd7-80b3-4ef5-ad76-1776cef6016c" />
+
+Agentic RAG works by decomposing a complex question into smaller sub-tasks and planning how to retrieve information. Instead of performing a single retrieval step, it uses an LLM-based agent to iteratively decide which sources or tools to query, how to reformulate queries when results are insufficient, and when enough information has been gathered.
+
+It evaluates intermediate retrieval results and adapts its strategy dynamically, rather than stopping after the first retrieval attempt.
+
 * LLM decides how to retrieve, when to retrieve again, and how to refine retrieval strategy
 * LLM acts as a **reasoning agent controlling the retrieval process**
 * Can iteratively:
@@ -181,12 +187,23 @@ Cons:
 **When to use Agentic RAG:**
 Use Agentic RAG when retrieval cannot be solved in a single static step and requires **adaptive reasoning over retrieval actions**:
 
+* Domains such as legal research and financial analysis where answers require combining information from multiple sources, interpreting complex documents, and performing multi-step reasoning across heterogeneous data
 * Complex queries that require **multi-hop reasoning across documents or sources**
 * Tasks where the system must **decompose a question into sub-questions before retrieving**
 * Cases where the model must **decide dynamically which tools or data sources to use (vector DB, web, APIs, etc.)**
 * Scenarios where initial retrieval is often **insufficient and must be iteratively refined**
 * Applications requiring **query rewriting, planning, and verification during retrieval**
 
+**Pros**
+- Strong performance on multi-step reasoning tasks
+- Adaptive information retrieval strategy
+- Can combine multiple tools and sources dynamically
+
+**Cons**
+- Higher computational cost due to iterative loops
+- More complex system design and orchestration
+- Increased latency due to multi-step reasoning
+- Harder to evaluate and debug
 
 ---
 
