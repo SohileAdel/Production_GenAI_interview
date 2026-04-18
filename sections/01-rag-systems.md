@@ -258,6 +258,7 @@ GraphRAG is especially useful in domains where understanding relationships acros
 * legal discovery systems
 
 **Microsoft's GraphRAG Implementation:**
+
 Microsoft’s GraphRAG improves answer quality for global and dataset-wide queries by leveraging a knowledge graph with hierarchical community summaries instead of flat chunk retrieval. It significantly increases indexing cost and system complexity due to LLM-based entity extraction, relationship building, and summarization. It is best suited for high-value corpora where understanding relationships across documents and producing global insights is more important than minimizing cost or latency.
 
 **Production Approach:**
